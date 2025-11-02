@@ -3,6 +3,7 @@ from .clustering import (
     plot_3d_clusters,
     plot_cluster_metrics,
     plot_cluster_scatterplots,
+    plot_comparison_boxplots,
     train_kmeans_range,
 )
 from .data_processing import (
@@ -30,6 +31,7 @@ __all__ = [
     "calculate_cluster_metrics",
     "plot_cluster_metrics",
     "plot_cluster_scatterplots",
+    "plot_comparison_boxplots",
     "plot_3d_clusters",
     "CLINICAL_PRESETS",
     "load_geojson",

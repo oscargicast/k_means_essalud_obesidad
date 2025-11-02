@@ -312,3 +312,137 @@ def plot_3d_clusters(
 
     plt.tight_layout()
     return fig, ax
+
+
+def plot_comparison_boxplots(
+    dataframes,
+    labels,
+    value_cols,
+    col_labels=None,
+    figsize=None,
+    palette="Set2",
+    showfliers=True,
+    show_stats=False,
+):
+    """
+    Crea boxplots para comparar distribuciones entre múltiples DataFrames.
+
+    Útil para visualizar el efecto de limpieza de outliers, transformaciones,
+    o cualquier comparación entre diferentes versiones de un dataset.
+
+    Parameters
+    ----------
+    dataframes : list of pd.DataFrame
+        Lista de DataFrames a comparar (e.g., [df_original, df_clean])
+    labels : list of str
+        Etiquetas para cada DataFrame (e.g., ["Original", "Sin outliers"])
+    value_cols : list of str
+        Nombres de columnas a graficar (e.g., ["tri", "glu", "edad_paciente"])
+    col_labels : list of str, optional
+        Etiquetas legibles para cada columna. Si None, usa value_cols.
+    figsize : tuple, optional
+        Tamaño de figura (ancho, alto). Si None, calcula automáticamente.
+    palette : str, default "Set2"
+        Paleta de colores de seaborn
+    showfliers : bool, default True
+        Si True, muestra outliers como puntos individuales
+    show_stats : bool, default False
+        Si True, anota estadísticas (media, mediana, Q1, Q3) dentro de cada boxplot
+
+    Returns
+    -------
+    fig, axes : matplotlib.figure.Figure, np.ndarray
+        Figura y array de ejes de matplotlib
+
+    Example
+    -------
+    >>> fig, axes = plot_comparison_boxplots(
+    ...     dataframes=[df, df_clean],
+    ...     labels=["Original", "Sin outliers"],
+    ...     value_cols=["tri", "glu"],
+    ...     col_labels=["Triglicéridos (mg/dL)", "Glucosa (mg/dL)"]
+    ... )
+    >>> plt.savefig("comparison.png", dpi=150, bbox_inches="tight")
+    """
+    import pandas as pd
+
+    if len(dataframes) != len(labels):
+        raise ValueError("dataframes y labels deben tener la misma longitud")
+
+    if col_labels is None:
+        col_labels = value_cols
+
+    if len(value_cols) != len(col_labels):
+        raise ValueError("value_cols y col_labels deben tener la misma longitud")
+
+    n_cols = len(value_cols)
+
+    if figsize is None:
+        figsize = (7 * n_cols, 6)
+
+    fig, axes = plt.subplots(1, n_cols, figsize=figsize)
+
+    if n_cols == 1:
+        axes = [axes]
+
+    combined_dfs = []
+    for df, label in zip(dataframes, labels):
+        df_temp = df[value_cols].copy()
+        df_temp["Dataset"] = label
+        combined_dfs.append(df_temp)
+
+    df_combined = pd.concat(combined_dfs, ignore_index=True)
+
+    for idx, (col, col_label) in enumerate(zip(value_cols, col_labels)):
+        ax = axes[idx]
+
+        sns.boxplot(
+            data=df_combined,
+            x="Dataset",
+            y=col,
+            palette=palette,
+            ax=ax,
+            showfliers=showfliers,
+            linewidth=1.5,
+        )
+
+        ax.set_xlabel("", fontsize=12)
+        ax.set_ylabel(col_label, fontsize=12)
+        ax.set_title(col_label, fontsize=14, fontweight="bold")
+        ax.grid(True, alpha=0.3, axis="y", linestyle=":")
+        ax.tick_params(axis="x", labelsize=11)
+        ax.tick_params(axis="y", labelsize=10)
+
+        if show_stats:
+            for group_idx, (df_data, label) in enumerate(zip(dataframes, labels)):
+                mean_val = df_data[col].mean()
+                median_val = df_data[col].median()
+                q1_val = df_data[col].quantile(0.25)
+                q3_val = df_data[col].quantile(0.75)
+
+                stats_text = (
+                    f"Media: {mean_val:.1f}\n"
+                    f"Mediana: {median_val:.1f}\n"
+                    f"Q1: {q1_val:.1f}\n"
+                    f"Q3: {q3_val:.1f}"
+                )
+
+                ax.text(
+                    group_idx,
+                    median_val,
+                    stats_text,
+                    ha="center",
+                    va="center",
+                    bbox=dict(
+                        boxstyle="round,pad=0.5",
+                        facecolor="white",
+                        alpha=0.9,
+                        edgecolor="black",
+                        linewidth=1.5,
+                    ),
+                    fontsize=9,
+                    weight="bold",
+                )
+
+    plt.tight_layout()
+    return fig, axes
