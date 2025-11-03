@@ -70,10 +70,10 @@ def plot_choropleth_map(
     ax.set_xlim(-82, -68)
     ax.set_ylim(-19, 0)
     ax.set_aspect("equal")
-    ax.set_xlabel("Longitud", fontsize=12)
-    ax.set_ylabel("Latitud", fontsize=12)
-    ax.set_title(title, fontsize=14, fontweight="bold", pad=15)
-    ax.grid(True, alpha=0.3, linestyle="--", linewidth=0.5)
+    ax.set_xlabel("Longitud", fontsize=11)
+    ax.set_ylabel("Latitud", fontsize=11)
+    ax.set_title(title, fontsize=12, pad=20)
+    ax.grid(True, alpha=0.2, linestyle="--", linewidth=0.5)
 
     if hide_ticks:
         ax.set_xticks([])
@@ -83,6 +83,7 @@ def plot_choropleth_map(
     sm.set_array([])
     cbar = plt.colorbar(sm, ax=ax, fraction=0.046, pad=0.04)
     cbar.set_label(f"{metric_col.replace('_', ' ').title()}", fontsize=11)
+    cbar.ax.tick_params(labelsize=10)
 
     return ax
 
@@ -92,6 +93,7 @@ def create_department_choropleth(
     geojson_path,
     value_cols=["tri", "glu"],
     titles=None,
+    suptitle=None,
     figsize=(20, 10),
     **kwargs,
 ):
@@ -113,4 +115,8 @@ def create_department_choropleth(
         )
 
     plt.tight_layout()
+
+    if suptitle:
+        fig.suptitle(suptitle, fontsize=14, x=0.5, y=1.02, ha="center")
+
     return fig, axes, dept_stats_full

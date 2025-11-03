@@ -66,65 +66,54 @@ def plot_cluster_metrics(K_range, db_scores, ch_scores, wcss, figsize=(24, 5)):
         x=list(K_range),
         y=db_scores,
         marker="o",
-        markerfacecolor="red",
-        markeredgecolor="red",
-        color="darkred",
-        linewidth=2,
+        markersize=5,
+        markerfacecolor="#8B4513",
+        markeredgecolor="#8B4513",
+        color="#8B4513",
+        linewidth=1.5,
         ax=axes[0],
     )
-    axes[0].grid(True, alpha=0.3)
-    axes[0].set_xlabel("Número de Clusters (K)", fontsize=12)
-    axes[0].set_ylabel("Davies-Bouldin Index", fontsize=12)
-    axes[0].set_title(
-        "Davies-Bouldin Index por K",
-        fontsize=13,
-        fontweight="bold",
-    )
+    axes[0].grid(True, alpha=0.2)
+    axes[0].set_xlabel("Número de Clusters (K)", fontsize=10)
+    axes[0].set_ylabel("Davies-Bouldin Index", fontsize=10)
+    axes[0].set_title("Davies-Bouldin Index por K", fontsize=11)
     axes[0].set_xticks(K_range)
 
     sns.lineplot(
         x=list(K_range),
         y=ch_scores,
         marker="o",
-        markerfacecolor="green",
-        markeredgecolor="green",
-        color="darkgreen",
-        linewidth=2,
+        markersize=5,
+        markerfacecolor="#556B2F",
+        markeredgecolor="#556B2F",
+        color="#556B2F",
+        linewidth=1.5,
         ax=axes[1],
     )
-    axes[1].grid(True, alpha=0.3)
-    axes[1].set_xlabel("Número de Clusters (K)", fontsize=12)
-    axes[1].set_ylabel("Calinski-Harabasz Score", fontsize=12)
-    axes[1].set_title(
-        "Calinski-Harabasz Score por K",
-        fontsize=13,
-        fontweight="bold",
-    )
+    axes[1].grid(True, alpha=0.2)
+    axes[1].set_xlabel("Número de Clusters (K)", fontsize=10)
+    axes[1].set_ylabel("Calinski-Harabasz Score", fontsize=10)
+    axes[1].set_title("Calinski-Harabasz Score por K", fontsize=11)
     axes[1].set_xticks(K_range)
 
     sns.lineplot(
         x=list(K_range),
         y=wcss,
         marker="o",
-        markerfacecolor="blue",
-        markeredgecolor="blue",
-        color="darkblue",
-        linewidth=2,
+        markersize=5,
+        markerfacecolor="#2E5266",
+        markeredgecolor="#2E5266",
+        color="#2E5266",
+        linewidth=1.5,
         ax=axes[2],
     )
-    axes[2].grid(True, alpha=0.3)
-    axes[2].set_xlabel("Número de Clusters (K)", fontsize=12)
-    axes[2].set_ylabel("WCSS", fontsize=12)
-    axes[2].set_title(
-        "Within-Cluster Sum of Squares",
-        fontsize=13,
-        fontweight="bold",
-    )
+    axes[2].grid(True, alpha=0.2)
+    axes[2].set_xlabel("Número de Clusters (K)", fontsize=10)
+    axes[2].set_ylabel("WCSS", fontsize=10)
+    axes[2].set_title("Within-Cluster Sum of Squares", fontsize=11)
     axes[2].set_xticks(K_range)
 
-    plt.suptitle(
-        "Métricas de Validación de Clusters", fontsize=15, fontweight="bold", y=1.02
-    )
+    plt.suptitle("Métricas de Validación de Clusters", fontsize=12, y=1.02)
     plt.tight_layout()
     return fig, axes
 
@@ -144,7 +133,7 @@ def plot_cluster_scatterplots(
     clinical_thresholds=None,
     vertical_thresholds=None,
     figsize_per_row=(20, 6),
-    palette="tab10",
+    palette="Set2",
     s=20,
     alpha=0.5,
 ):
@@ -201,20 +190,20 @@ def plot_cluster_scatterplots(
                     label=threshold.get("label", ""),
                 )
 
-        ax.set_xlabel(x_label or x_col, fontsize=12)
-        ax.set_ylabel(y_label or y_col, fontsize=12)
+        ax.set_xlabel(x_label or x_col, fontsize=10)
+        ax.set_ylabel(y_label or y_col, fontsize=10)
 
         title_k = f"K = {k}"
         if best_k and k == best_k:
             title_k += "  ★ ÓPTIMO"
-        ax.set_title(title_k, fontsize=14, fontweight="bold")
+        ax.set_title(title_k, fontsize=11)
 
         if x_lim:
             ax.set_xlim(x_lim)
         if y_lim:
             ax.set_ylim(y_lim)
 
-        ax.grid(True, alpha=0.3, linestyle=":")
+        ax.grid(True, alpha=0.2, linestyle=":")
 
         handles, labels = ax.get_legend_handles_labels()
         ax.legend(
@@ -225,7 +214,7 @@ def plot_cluster_scatterplots(
         fig.delaxes(axes[j])
 
     if title:
-        plt.suptitle(title, fontsize=16, fontweight="bold", y=1.00)
+        plt.suptitle(title, fontsize=12, y=1.00)
 
     plt.tight_layout()
     return fig, axes
@@ -247,7 +236,7 @@ def plot_3d_clusters(
     figsize=(14, 10),
     s=5,
     alpha=0.3,
-    palette="tab10",
+    palette="Set2",
     view=(20, 45),
     sample_n=None,
     random_state=42,
@@ -255,7 +244,6 @@ def plot_3d_clusters(
     fig = plt.figure(figsize=figsize)
     ax = fig.add_subplot(111, projection="3d")
 
-    # Sample data if requested
     if sample_n and len(df) > sample_n:
         df = df.sample(n=sample_n, random_state=random_state)
 
@@ -267,7 +255,7 @@ def plot_3d_clusters(
 
     cluster_colors = df[cluster_col].map(color_map)
 
-    scatter = ax.scatter(
+    ax.scatter(
         df[x_col],
         df[y_col],
         df[z_col],
@@ -284,14 +272,14 @@ def plot_3d_clusters(
     ax.yaxis.pane.set_alpha(0.1)
     ax.zaxis.pane.set_alpha(0.1)
 
-    ax.grid(True, alpha=0.3, linestyle="--", linewidth=0.5)
+    ax.grid(True, alpha=0.2, linestyle="--", linewidth=0.5)
 
-    ax.set_xlabel(x_label or x_col, fontsize=12, labelpad=10)
-    ax.set_ylabel(y_label or y_col, fontsize=12, labelpad=10)
-    ax.set_zlabel(z_label or z_col, fontsize=12, labelpad=10)
+    ax.set_xlabel(x_label or x_col, fontsize=10, labelpad=10)
+    ax.set_ylabel(y_label or y_col, fontsize=10, labelpad=10)
+    ax.set_zlabel(z_label or z_col, fontsize=10, labelpad=10)
 
     if title:
-        ax.set_title(title, fontsize=14, fontweight="bold", pad=20)
+        ax.set_title(title, fontsize=11, pad=20)
 
     if x_lim:
         ax.set_xlim(x_lim)
@@ -323,6 +311,8 @@ def plot_comparison_boxplots(
     palette="Set2",
     showfliers=True,
     show_stats=False,
+    stats_y_offset=3.0,
+    normal_ranges=None,
 ):
     """
     Crea boxplots para comparar distribuciones entre múltiples DataFrames.
@@ -348,6 +338,14 @@ def plot_comparison_boxplots(
         Si True, muestra outliers como puntos individuales
     show_stats : bool, default False
         Si True, anota estadísticas (media, mediana, Q1, Q3) dentro de cada boxplot
+    stats_y_offset : float or list of float, default 3.0
+        Multiplicador para calcular posición Y del cuadro de estadísticas.
+        - Si float: mismo offset para todos los subplots
+        - Si lista: un offset por subplot (debe tener len = len(value_cols))
+        Fórmula: y_position = Q3 * stats_y_offset. Ajustar si el cuadro se superpone.
+    normal_ranges : dict, optional
+        Diccionario con rangos normales por columna. Ej: {"tri": (0, 150), "glu": (70, 99)}
+        Dibuja franjas verdes horizontales indicando valores normales.
 
     Returns
     -------
@@ -377,6 +375,16 @@ def plot_comparison_boxplots(
 
     n_cols = len(value_cols)
 
+    if isinstance(stats_y_offset, (list, tuple)):
+        if len(stats_y_offset) != n_cols:
+            raise ValueError(
+                f"stats_y_offset como lista debe tener longitud {n_cols}, "
+                f"pero tiene {len(stats_y_offset)}"
+            )
+        stats_y_offsets = list(stats_y_offset)
+    else:
+        stats_y_offsets = [stats_y_offset] * n_cols
+
     if figsize is None:
         figsize = (7 * n_cols, 6)
 
@@ -400,18 +408,31 @@ def plot_comparison_boxplots(
             data=df_combined,
             x="Dataset",
             y=col,
+            hue="Dataset",
             palette=palette,
+            legend=False,
             ax=ax,
             showfliers=showfliers,
             linewidth=1.5,
         )
 
-        ax.set_xlabel("", fontsize=12)
-        ax.set_ylabel(col_label, fontsize=12)
-        ax.set_title(col_label, fontsize=14, fontweight="bold")
-        ax.grid(True, alpha=0.3, axis="y", linestyle=":")
-        ax.tick_params(axis="x", labelsize=11)
-        ax.tick_params(axis="y", labelsize=10)
+        if normal_ranges and col in normal_ranges:
+            ymin, ymax = normal_ranges[col]
+            ax.axhspan(
+                ymin,
+                ymax,
+                alpha=0.08,
+                color="green",
+                zorder=0,
+                label=f"Rango normal ({ymin}-{ymax})",
+            )
+
+        ax.set_xlabel("", fontsize=10)
+        ax.set_ylabel(col_label, fontsize=10)
+        ax.set_title(col_label, fontsize=11)
+        ax.grid(True, alpha=0.2, axis="y", linestyle=":")
+        ax.tick_params(axis="x", labelsize=10)
+        ax.tick_params(axis="y", labelsize=9)
 
         if show_stats:
             for group_idx, (df_data, label) in enumerate(zip(dataframes, labels)):
@@ -427,21 +448,199 @@ def plot_comparison_boxplots(
                     f"Q3: {q3_val:.1f}"
                 )
 
+                y_position = q3_val * stats_y_offsets[idx]
+
                 ax.text(
                     group_idx,
-                    median_val,
+                    y_position,
                     stats_text,
                     ha="center",
-                    va="center",
+                    va="bottom",
                     bbox=dict(
                         boxstyle="round,pad=0.5",
                         facecolor="white",
                         alpha=0.9,
-                        edgecolor="black",
-                        linewidth=1.5,
+                        edgecolor="#666666",
+                        linewidth=1,
                     ),
                     fontsize=9,
-                    weight="bold",
+                )
+
+    plt.tight_layout()
+    return fig, axes
+
+
+def plot_variables_by_dataset(
+    df_with_outliers,
+    df_clean,
+    value_cols=["tri", "glu"],
+    col_labels=None,
+    dataset_labels=None,
+    figsize=(16, 8),
+    palette="Set2",
+    showfliers=True,
+    show_stats=False,
+    stats_y_offset=2.0,
+    normal_ranges=None,
+):
+    """
+    Crea boxplots comparando variables agrupadas por dataset.
+
+    A diferencia de plot_comparison_boxplots (que agrupa por variable y muestra datasets),
+    esta función agrupa por dataset y muestra variables.
+
+    Útil para comparar múltiples métricas clínicas dentro de cada condición
+    (con/sin outliers, antes/después tratamiento, etc.)
+
+    Parameters
+    ----------
+    df_with_outliers : pd.DataFrame
+        DataFrame con datos originales (con outliers)
+    df_clean : pd.DataFrame
+        DataFrame con datos limpios (sin outliers)
+    value_cols : list of str
+        Nombres de columnas a graficar (e.g., ["tri", "glu"])
+    col_labels : list of str, optional
+        Etiquetas legibles para cada columna. Si None, usa value_cols.
+    dataset_labels : list of str, optional
+        Etiquetas para los datasets. Default: ["Con outliers", "Sin outliers"]
+    figsize : tuple, default (16, 8)
+        Tamaño de figura (ancho, alto)
+    palette : str, default "Set2"
+        Paleta de colores de seaborn
+    showfliers : bool, default True
+        Si True, muestra outliers como puntos individuales
+    show_stats : bool, default False
+        Si True, anota estadísticas (media, mediana, Q1, Q3) dentro de cada boxplot
+    stats_y_offset : float or list of float, default 2.0
+        Multiplicador para calcular posición Y del cuadro de estadísticas.
+        - Si float: mismo offset para todas las variables
+        - Si lista: un offset por variable (debe tener len = len(value_cols))
+        Fórmula: y_position = Q3 * stats_y_offset. Ajustar si el cuadro se superpone.
+    normal_ranges : dict, optional
+        Diccionario con rangos normales por columna. Ej: {"tri": (0, 150), "glu": (70, 99)}
+
+    Returns
+    -------
+    fig, axes : matplotlib.figure.Figure, np.ndarray
+        Figura y array de ejes de matplotlib
+
+    Example
+    -------
+    >>> fig, axes = plot_variables_by_dataset(
+    ...     df_with_outliers=df,
+    ...     df_clean=df_clean,
+    ...     value_cols=["tri", "glu"],
+    ...     col_labels=["Triglicéridos (mg/dL)", "Glucosa (mg/dL)"],
+    ...     normal_ranges={"tri": (0, 150), "glu": (70, 99)},
+    ...     show_stats=True
+    ... )
+    """
+    import pandas as pd
+
+    if col_labels is None:
+        col_labels = value_cols
+
+    if len(value_cols) != len(col_labels):
+        raise ValueError("value_cols y col_labels deben tener la misma longitud")
+
+    n_vars = len(value_cols)
+
+    if isinstance(stats_y_offset, (list, tuple)):
+        if len(stats_y_offset) != n_vars:
+            raise ValueError(
+                f"stats_y_offset como lista debe tener longitud {n_vars}, "
+                f"pero tiene {len(stats_y_offset)}"
+            )
+        stats_y_offsets = list(stats_y_offset)
+    else:
+        stats_y_offsets = [stats_y_offset] * n_vars
+
+    if dataset_labels is None:
+        dataset_labels = ["Con outliers", "Sin outliers"]
+
+    dataframes = [df_with_outliers, df_clean]
+    n_datasets = len(dataframes)
+
+    fig, axes = plt.subplots(1, n_datasets, figsize=figsize)
+
+    if n_datasets == 1:
+        axes = [axes]
+
+    for ds_idx, (df_data, ds_label) in enumerate(zip(dataframes, dataset_labels)):
+        ax = axes[ds_idx]
+
+        combined_dfs = []
+        for col, col_label in zip(value_cols, col_labels):
+            df_temp = pd.DataFrame({col: df_data[col], "Variable": col_label})
+            combined_dfs.append(df_temp)
+
+        df_combined = pd.concat(combined_dfs, ignore_index=True)
+        df_combined_melted = df_combined.melt(
+            id_vars="Variable", var_name="Metric", value_name="Value"
+        )
+
+        sns.boxplot(
+            data=df_combined_melted,
+            x="Variable",
+            y="Value",
+            hue="Variable",
+            palette=palette,
+            legend=False,
+            ax=ax,
+            showfliers=showfliers,
+            linewidth=1.5,
+        )
+
+        if normal_ranges:
+            for col_idx, col in enumerate(value_cols):
+                if col in normal_ranges:
+                    ymin, ymax = normal_ranges[col]
+                    ax.axhspan(
+                        ymin,
+                        ymax,
+                        alpha=0.08,
+                        color="green",
+                        zorder=0,
+                    )
+
+        ax.set_xlabel("", fontsize=10)
+        ax.set_ylabel("Valor", fontsize=10)
+        ax.set_title(ds_label, fontsize=11)
+        ax.grid(True, alpha=0.2, axis="y", linestyle=":")
+        ax.tick_params(axis="x", labelsize=10)
+        ax.tick_params(axis="y", labelsize=9)
+
+        if show_stats:
+            for col_idx, (col, col_label) in enumerate(zip(value_cols, col_labels)):
+                mean_val = df_data[col].mean()
+                median_val = df_data[col].median()
+                q1_val = df_data[col].quantile(0.25)
+                q3_val = df_data[col].quantile(0.75)
+
+                stats_text = (
+                    f"Media: {mean_val:.1f}\n"
+                    f"Mediana: {median_val:.1f}\n"
+                    f"Q1: {q1_val:.1f}\n"
+                    f"Q3: {q3_val:.1f}"
+                )
+
+                y_position = q3_val * stats_y_offsets[col_idx]
+
+                ax.text(
+                    col_idx,
+                    y_position,
+                    stats_text,
+                    ha="center",
+                    va="bottom",
+                    bbox=dict(
+                        boxstyle="round,pad=0.5",
+                        facecolor="white",
+                        alpha=0.9,
+                        edgecolor="#666666",
+                        linewidth=1,
+                    ),
+                    fontsize=9,
                 )
 
     plt.tight_layout()

@@ -1,4 +1,3 @@
-import matplotlib.pyplot as plt
 import seaborn as sns
 
 from .geo_viz_base import add_department_boundaries
@@ -44,7 +43,7 @@ def plot_cluster_map(
     ax.set_ylabel("Latitud", fontsize=11)
 
     if title:
-        ax.set_title(title, fontweight="bold", fontsize=13)
+        ax.set_title(title, fontsize=13)
 
     ax.grid(True, alpha=0.3, linestyle="--", linewidth=0.5)
 

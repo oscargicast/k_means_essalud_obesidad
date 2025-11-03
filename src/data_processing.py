@@ -1,4 +1,5 @@
 import numpy as np
+import pandas as pd
 from feature_engine.outliers import OutlierTrimmer
 from sklearn.preprocessing import LabelEncoder, normalize
 
